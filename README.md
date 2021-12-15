@@ -1,4 +1,4 @@
 # Catstronauts - client
 
 node backend w/ graphql for some cool space cats
-# graph-tut-server
+# graph-tut-client
