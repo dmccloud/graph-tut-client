@@ -1,32 +1,45 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { ModuleDetail, QueryResult } from "../components";
+import { Layout, ModuleDetail, QueryResult } from "../components";
 
 export const GET_TRACK_AND_MODULES = gql`
-  query getTracksWithModules($trackId: ID!) {
+  query getTracksWithModules($trackId: ID!, $moduleId: ID!) {
     track(id: $trackId) {
+      id
+      title
+      length
+      modulesCount
+      description
+      numberOfViews
       modules {
-        videoUrl
-        content
-        authorId
-        trackId
-        topic
-        length
-        title
         id
+        title
+        length
       }
+    }
+    module(id: $moduleId) {
+      id
+      title
+      length
+      topic
+      trackId
+      authorId
+      content
+      videoUrl
     }
   }
 `;
 
-export const Module = ({ trackId }) => {
+export const Module = ({ trackId, moduleId }) => {
   const { loading, error, data } = useQuery(GET_TRACK_AND_MODULES, {
-    variables: { trackId },
+    variables: { trackId, moduleId },
   });
 
   return (
-    <QueryResult loading={loading} error={error} data={data}>
-      <ModuleDetail track={data?.track} module={data?.track?.modules[0]} />
-    </QueryResult>
+    <Layout fullWidth={true}>
+      <QueryResult loading={loading} error={error} data={data}>
+        <ModuleDetail id={moduleId} track={data?.track} module={data?.module} />
+      </QueryResult>
+    </Layout>
   );
 };
